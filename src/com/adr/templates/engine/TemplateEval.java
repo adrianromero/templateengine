@@ -20,6 +20,8 @@ package com.adr.templates.engine;
 
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 
 /**
@@ -27,9 +29,6 @@ import java.io.Writer;
  * @author adrian
  */
 public class TemplateEval {
-    
-//    private ScriptEngine engine = null;
-//    private ScriptContext context = null;
 
     private TemplateLanguage language;
     private TemplateScope scope;
@@ -53,5 +52,21 @@ public class TemplateEval {
     public void eval(Reader r, Writer w) throws Exception {
         scope.setOut(new PrintWriter(w));
         scope.eval(new TemplateReader(language, r), "<template>");
+    }
+
+    public void eval(String r, Writer w) throws Exception {
+        eval(new StringReader(r), w);
+    }
+
+    public String eval(Reader r) throws Exception {
+        Writer w = new StringWriter();
+        eval(r, w);
+        return w.toString();
+    }
+
+    public String eval(String r) throws Exception {
+        Writer w = new StringWriter();
+        eval(new StringReader(r), w);
+        return w.toString();
     }
 }
