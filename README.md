@@ -8,16 +8,16 @@ Usage
 
 To use the template engine you only need to instantiate the class `TemplateEval` using one of the supported scripting languages:
 
- TemplateEval e = new TemplateEval("javax.script:javascript");
+    TemplateEval e = new TemplateEval("javax.script:javascript");
 
 Set the model to the `TemplateEval` instance.
 
- e.put("a", 5);
- e.put("b", 1);
+    e.put("a", 5);
+    e.put("b", 1);
 
 Evaluate the template and get the result.
 
- String result = e.eval(template);
+    String result = e.eval(template);
 
 This is a complete example using a test template document.
 
@@ -42,21 +42,21 @@ This is a complete example using a test template document.
 
 That prints to the console the following result:
 
- Document header
- Nothing goes here: 
- These are expression evaluations: 6, null.
- Escape: <% and %>
- Scripting instructions to repeat 5 times a template section:
- Template section 0
- Template section 1
- Template section 2
- Template section 3
- Template section 4
- Template section 5
- Template section 6
- Template section 7
- Template section 8
- Template section 9
+    Document header
+    Nothing goes here: 
+    These are expression evaluations: 6, null.
+    Escape: <% and %>
+    Scripting instructions to repeat 5 times a template section:
+    Template section 0
+    Template section 1
+    Template section 2
+    Template section 3
+    Template section 4
+    Template section 5
+    Template section 6
+    Template section 7
+    Template section 8
+    Template section 9
 
 Markup syntax
 -------------
