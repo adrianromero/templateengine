@@ -18,6 +18,11 @@
 
 package com.adr.templates.engine;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
@@ -32,12 +37,24 @@ public class TemplateEval {
 
     private TemplateLanguage language;
     private TemplateScope scope;
+    private String cachedtemplate;
 
     public TemplateEval(String name) throws Exception {
-        this(TemplateLanguageFactory.get(name));
+        init(TemplateLanguageFactory.get(name));
+        this.cachedtemplate = null;
     }
 
     public TemplateEval(TemplateLanguage language) throws Exception {
+        init(language);
+        this.cachedtemplate = null;
+    }
+
+    public TemplateEval(TemplateLanguage language, Reader template) throws Exception {
+        init(language);
+        this.cachedtemplate = loadReader(new TemplateReader(language, template));
+    }
+
+    private void init(TemplateLanguage language) throws Exception {
         if (language == null) {
             throw new TemplateException("Template language not found.");
         }
@@ -47,6 +64,11 @@ public class TemplateEval {
 
     public void put(String key, Object value) {
         scope.put(key, value);
+    }
+
+    public void eval(Writer w) throws Exception {
+        scope.setOut(new PrintWriter(w));
+        scope.eval(new StringReader(cachedtemplate), "<template>");
     }
     
     public void eval(Reader r, Writer w) throws Exception {
@@ -68,5 +90,56 @@ public class TemplateEval {
         Writer w = new StringWriter();
         eval(new StringReader(r), w);
         return w.toString();
+    }
+
+    public void eval(File filer, File filew) throws Exception {
+        eval(filer, filew, false);
+    }
+
+    public void eval(File filer, File filew, boolean append) throws Exception {
+
+        Writer w = null;
+        Reader r = null;
+
+        try {
+            w = new FileWriter(filew, append);
+            r = new FileReader(filer);
+            eval(r, w);
+        } finally {
+            if (r != null) {
+                try {
+                    r.close();
+                } catch (IOException eio) {
+                }
+            }
+            if (w != null) {
+                try {
+                    w.close();
+                } catch (IOException eio) {
+                }
+            }
+        }
+    }
+
+    private static String loadReader(Reader stream) throws IOException {
+        BufferedReader r = null;
+        StringBuilder text = new StringBuilder();
+        try {
+            r = new BufferedReader(stream);
+
+            String line = null;
+            while ((line = r.readLine()) != null) {
+                text.append(line);
+                text.append(System.getProperty("line.separator"));
+            }
+        } finally {
+            if (r != null) {
+                try {
+                    r.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return text.toString();
     }
 }
