@@ -3,6 +3,14 @@ Simple Template Engine
 
 Simple Template Engine is a java library that combines templates with a data model to produce a result document. It is inspired in the JSP markup language and uses the java scripting functionality included in the java platform since the 1.6 version and can use other scripting languages supported by the java platform. Currenty only supports the javascript language.
 
+Benefits
+--------
+
+* Full featured template engine.
+* No need to learn a new template language. All you need is your knowledge in javascript.
+* Small footprint. The library is really, really small.
+* Pluggable scripting languange. If you preffer another scripting language supported by the java platform like Groovy, JPhyton, JRuby... It is very easy to include it.
+
 Usage
 -----
 
